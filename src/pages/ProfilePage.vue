@@ -6,10 +6,7 @@
           <div class="row no-wrap">
             <!-- User Avatar -->
             <q-avatar size="100px" class="q-mr-md">
-              <img
-                src="https://cdn.quasar.dev/img/avatar.png"
-                alt="User Avatar"
-              />
+              <img :src="user.avatar" alt="User Avatar" />
             </q-avatar>
 
             <div>
@@ -52,25 +49,113 @@
 
         <!-- Action Buttons -->
         <q-card-actions align="right">
-          <q-btn label="Edit Profile" color="primary" />
+          <q-btn label="Edit Profile" color="primary" @click="openEditDialog" />
           <q-btn label="Change Password" color="secondary" />
         </q-card-actions>
       </q-card>
+
+      <!-- Edit Dialog -->
+      <q-dialog v-model="editDialog" persistent>
+        <q-card>
+          <q-card-section>
+            <div class="text-h6">Edit Profile</div>
+          </q-card-section>
+
+          <q-card-section>
+            <!-- Edit Avatar with Image Upload -->
+            <q-avatar size="100px" class="q-mb-md">
+              <img :src="form.avatar" alt="Edit User Avatar" />
+            </q-avatar>
+            <input type="file" accept="image/*" @change="onFileChange" />
+
+            <!-- Edit Name -->
+            <q-input v-model="form.name" label="Name" />
+
+            <!-- Edit Email -->
+            <q-input v-model="form.email" label="Email" />
+
+            <!-- Edit Phone -->
+            <q-input v-model="form.phone" label="Phone" />
+
+            <!-- Edit Address -->
+            <q-input v-model="form.address" label="Address" />
+
+            <!-- Edit Skills -->
+            <q-input v-model="form.skills" label="Skills" />
+          </q-card-section>
+
+          <!-- Dialog Action Buttons -->
+          <q-card-actions align="right">
+            <q-btn label="Cancel" flat @click="closeEditDialog" />
+            <q-btn label="Save" color="primary" @click="saveProfile" />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
     </q-page>
   </div>
 </template>
 
 <script setup>
-// Profile data
-const user = {
-  name: "John Doe",
+import { ref, onMounted } from "vue";
+
+// Initial profile data
+const user = ref({
+  avatar: "https://cdn.quasar.dev/img/avatar.png",
+  name: "Sandaruwan",
   role: "Software Engineer",
-  email: "john.doe@example.com",
-  phone: "+123 456 789",
-  address: "1234 Street Name, City, Country",
-  joinedDate: "January 1, 2020",
-  skills: "JavaScript, Vue.js, Quasar Framework",
-};
+  email: "lsandaruwan388@gmail.com",
+  phone: "828287297",
+  address: "Blk !23 Bishan Street",
+  joinedDate: "January 1, 1994",
+  skills: "JavaScript, Vue.js, Quasar Framework, MongoDB, React Native",
+});
+
+// Edit Dialog State
+const editDialog = ref(false);
+
+// Form Data for Editing Profile
+const form = ref({ ...user.value });
+
+// Save user data to local storage key
+const STORAGE_KEY = "userProfile";
+
+// Load user data from local storage on page load
+onMounted(() => {
+  const savedUser = localStorage.getItem(STORAGE_KEY);
+  if (savedUser) {
+    user.value = JSON.parse(savedUser); // Load from local storage
+  }
+});
+
+// Open the dialog and copy user data to form
+function openEditDialog() {
+  form.value = { ...user.value }; // Copy user data into form
+  editDialog.value = true;
+}
+
+// Close the dialog
+function closeEditDialog() {
+  editDialog.value = false;
+}
+
+// Save profile changes back to user object and store in local storage
+function saveProfile() {
+  user.value = { ...form.value }; // Save form data to user object
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(user.value)); // Save to local storage
+  closeEditDialog();
+}
+
+// Handle file selection and update avatar
+function onFileChange(event) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      form.value.avatar = e.target.result; // Set the image source to the file's data URL
+    };
+    reader.readAsDataURL(file); // Convert the file to a data URL
+  }
+}
 </script>
 
 <style scoped>
