@@ -1,6 +1,5 @@
 <template>
   <q-page class="q-pa-md">
-    <!-- Banner or Hero Section -->
     <q-banner inline-actions class="bg-primary text-white">
       <template v-slot:avatar>
         <q-avatar size="56px" class="bg-white text-primary">
@@ -12,8 +11,7 @@
         Discover the features of this application, explore, and enjoy a seamless
         experience!
       </p>
-      <!-- Action Buttons -->
-      <q-banner-actions>
+      <q-banner-actions class="row items-center">
         <q-btn
           label="Get Started"
           color="white"
@@ -21,13 +19,19 @@
           class="q-mr-sm"
         />
         <q-btn label="Learn More" color="white" text-color="primary" />
+        <!-- Move the Logout button to the right with q-ml-auto -->
+        <q-btn
+          label="Logout"
+          color="negative"
+          @click="showLogoutDialog = true"
+          class="q-ml-auto"
+        />
       </q-banner-actions>
     </q-banner>
 
-    <!-- Featured Sections -->
     <div class="q-mt-xl q-px-md">
       <q-list>
-        <q-item clickable tag="router-link" :to="{ path: '/profile' }">
+        <q-item clickable tag="router-link" :to="{ path: '/profilePage' }">
           <q-item-section avatar>
             <q-icon name="person" />
           </q-item-section>
@@ -37,7 +41,7 @@
           </q-item-section>
         </q-item>
 
-        <q-item clickable tag="router-link" :to="{ path: '/summary' }">
+        <q-item clickable tag="router-link" :to="{ path: '/summaryPage' }">
           <q-item-section avatar>
             <q-icon name="assessment" />
           </q-item-section>
@@ -47,7 +51,7 @@
           </q-item-section>
         </q-item>
 
-        <q-item clickable tag="router-link" :to="{ path: '/devices' }">
+        <q-item clickable tag="router-link" :to="{ path: '/DevicePage' }">
           <q-item-section avatar>
             <q-icon name="devices" />
           </q-item-section>
@@ -58,17 +62,45 @@
         </q-item>
       </q-list>
     </div>
+
+    <!-- Logout Confirmation Dialog -->
+    <q-dialog v-model="showLogoutDialog" persistent>
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">Proceed to Logout?</div>
+          <p>Are you sure you want to log out?</p>
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn label="No" flat @click="showLogoutDialog = false" />
+          <q-btn label="Yes" color="negative" @click="confirmLogout" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
 <script setup>
-defineOptions({
-  name: "HomePage",
-});
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+
+// Define the dialog state for logout confirmation
+const showLogoutDialog = ref(false);
+
+// Vue Router instance
+const router = useRouter();
+
+// Logout confirmation function
+const confirmLogout = () => {
+  // Perform logout actions
+  console.log("Logging out...");
+  localStorage.removeItem("isAuthenticated");
+  showLogoutDialog.value = false; // Close the dialog
+  router.push("/loginPage"); // Redirect to the login page
+};
 </script>
 
 <style scoped>
-/* Additional home page styling */
 .q-banner {
   border-radius: 8px;
 }

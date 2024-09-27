@@ -1,62 +1,79 @@
 <template>
-  <q-page class="q-pa-md">
-    <div class="q-gutter-md" style="max-width: 400px; margin: auto">
-      <q-card>
-        <q-card-section>
-          <div class="text-h6">Login to Your Account</div>
-        </q-card-section>
-
-        <q-card-section>
-          <q-form @submit.prevent="login">
-            <q-input v-model="form.email" label="Email" type="email" required />
-            <q-input
-              v-model="form.password"
-              label="Password"
-              type="password"
-              required
-              class="q-mt-md"
-            />
-            <q-btn
-              label="Login"
-              type="submit"
-              color="primary"
-              class="full-width q-mt-md"
-            />
-          </q-form>
-        </q-card-section>
-      </q-card>
-    </div>
-  </q-page>
+  <div class="login-page">
+    <h1>Login Page</h1>
+    <form @submit.prevent="login">
+      <input
+        type="email"
+        v-model="form.email"
+        placeholder="Enter your email"
+        required
+      />
+      <input
+        type="password"
+        v-model="form.password"
+        placeholder="Enter your password"
+        required
+      />
+      <button type="submit">Login</button>
+    </form>
+    <p @click="goToRegister">Don't have an account? Register</p>
+  </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
-// Login form data
 const form = ref({
   email: "",
   password: "",
 });
 
-// Router for navigation
 const router = useRouter();
 
-// Mock login function (can be replaced by actual API call)
 function login() {
-  // For demonstration purposes, we validate a hardcoded email/password
-  if (
-    form.value.email === "admin@example.com" &&
-    form.value.password === "password"
-  ) {
-    // Navigate to the dashboard after successful login
-    router.push("/dashboard");
+  // Mock login for demonstration
+  if (form.value.email && form.value.password) {
+    localStorage.setItem("isAuthenticated", "true");
+    router.push("/"); // Redirect after login
   } else {
-    alert("Incorrect email or password.");
+    alert("Please fill in the email and password.");
   }
+}
+
+function goToRegister() {
+  router.push("/RegisterPage");
 }
 </script>
 
 <style scoped>
-/* Add any login-specific styles here */
+.login-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; /* Full height to center */
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+input {
+  margin-bottom: 10px;
+  padding: 10px;
+  width: 200px; /* Adjust width */
+}
+
+button {
+  padding: 10px;
+  background-color: blue;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: darkblue; /* Button hover effect */
+}
 </style>

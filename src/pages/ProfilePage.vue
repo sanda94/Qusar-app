@@ -5,7 +5,7 @@
         <q-card-section>
           <div class="row no-wrap">
             <!-- User Avatar -->
-            <q-avatar size="100px" class="q-mr-md">
+            <q-avatar size="100px" class="q-mr-md" @click="openImageDialog">
               <img :src="user.avatar" alt="User Avatar" />
             </q-avatar>
 
@@ -50,11 +50,15 @@
         <!-- Action Buttons -->
         <q-card-actions align="right">
           <q-btn label="Edit Profile" color="primary" @click="openEditDialog" />
-          <q-btn label="Change Password" color="secondary" />
+          <q-btn
+            label="Change Password"
+            color="secondary"
+            @click="showPasswordDialog = true"
+          />
         </q-card-actions>
       </q-card>
 
-      <!-- Edit Dialog -->
+      <!-- Edit Profile Dialog -->
       <q-dialog v-model="editDialog" persistent>
         <q-card>
           <q-card-section>
@@ -91,6 +95,63 @@
           </q-card-actions>
         </q-card>
       </q-dialog>
+
+      <!-- Change Password Dialog -->
+      <q-dialog v-model="showPasswordDialog" persistent>
+        <q-card>
+          <q-card-section>
+            <div class="text-h6">Change Password</div>
+          </q-card-section>
+
+          <q-card-section>
+            <q-input
+              v-model="newPassword"
+              type="password"
+              label="New Password"
+              filled
+              lazy-rules
+              :rules="[
+                (val) =>
+                  val.length >= 6 ||
+                  'Password must be at least 6 characters long',
+              ]"
+            />
+            <q-input
+              v-model="confirmPassword"
+              type="password"
+              label="Confirm Password"
+              filled
+              lazy-rules
+              :rules="[
+                (val) => val === newPassword || 'Passwords do not match',
+              ]"
+            />
+          </q-card-section>
+
+          <!-- Password Dialog Action Buttons -->
+          <q-card-actions align="right">
+            <q-btn
+              flat
+              label="Cancel"
+              color="primary"
+              @click="showPasswordDialog = false"
+            />
+            <q-btn label="Change" color="primary" @click="changePassword" />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
+
+      <!-- Image Dialog -->
+      <q-dialog v-model="imageDialog" persistent>
+        <q-card>
+          <q-card-section class="q-pa-md">
+            <img :src="user.avatar" alt="User Avatar" style="width: 100%" />
+          </q-card-section>
+          <q-card-actions>
+            <q-btn label="Close" color="primary" @click="imageDialog = false" />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
     </q-page>
   </div>
 </template>
@@ -105,7 +166,7 @@ const user = ref({
   role: "Software Engineer",
   email: "lsandaruwan388@gmail.com",
   phone: "828287297",
-  address: "Blk !23 Bishan Street",
+  address: "Blk 123 Bishan Street",
   joinedDate: "January 1, 1994",
   skills: "JavaScript, Vue.js, Quasar Framework, MongoDB, React Native",
 });
@@ -113,8 +174,16 @@ const user = ref({
 // Edit Dialog State
 const editDialog = ref(false);
 
+// Password Change Dialog State
+const showPasswordDialog = ref(false);
+const newPassword = ref("");
+const confirmPassword = ref("");
+
 // Form Data for Editing Profile
 const form = ref({ ...user.value });
+
+// Image Dialog State
+const imageDialog = ref(false);
 
 // Save user data to local storage key
 const STORAGE_KEY = "userProfile";
@@ -155,6 +224,21 @@ function onFileChange(event) {
     };
     reader.readAsDataURL(file); // Convert the file to a data URL
   }
+}
+
+// Handle password change
+function changePassword() {
+  if (newPassword.value && newPassword.value === confirmPassword.value) {
+    console.log("Password successfully changed:", newPassword.value);
+    showPasswordDialog.value = false;
+  } else {
+    console.log("Passwords do not match or are invalid");
+  }
+}
+
+// Open the image dialog
+function openImageDialog() {
+  imageDialog.value = true;
 }
 </script>
 
