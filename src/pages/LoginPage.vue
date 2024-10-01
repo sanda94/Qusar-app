@@ -3,7 +3,7 @@
     <!-- Add the image here -->
     <img src="~/assets/dd.png" alt="Login Image" class="login-image" />
 
-    <h1>Login</h1>
+    <h1>Login to Continue</h1>
     <form @submit.prevent="login">
       <input
         type="email"

@@ -31,16 +31,6 @@
 
     <div class="q-mt-xl q-px-md">
       <q-list>
-        <q-item clickable tag="router-link" :to="{ path: '/profilePage' }">
-          <q-item-section avatar>
-            <q-icon name="person" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Profile</q-item-label>
-            <q-item-label caption>Manage your profile details</q-item-label>
-          </q-item-section>
-        </q-item>
-
         <q-item clickable tag="router-link" :to="{ path: '/summaryPage' }">
           <q-item-section avatar>
             <q-icon name="assessment" />
@@ -48,6 +38,15 @@
           <q-item-section>
             <q-item-label>Summary</q-item-label>
             <q-item-label caption>View your data summary</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item clickable tag="router-link" :to="{ path: '/profilePage' }">
+          <q-item-section avatar>
+            <q-icon name="person" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Profile</q-item-label>
+            <q-item-label caption>Manage your profile details</q-item-label>
           </q-item-section>
         </q-item>
 
@@ -61,6 +60,16 @@
           </q-item-section>
         </q-item>
       </q-list>
+
+      <q-item clickable tag="router-link" :to="{ path: '/RulesPage' }">
+        <q-item-section avatar>
+          <q-icon name="public" />
+        </q-item-section>
+        <q-item-section>
+          <q-item-label>Rules</q-item-label>
+          <q-item-label caption>Manage your Rules</q-item-label>
+        </q-item-section>
+      </q-item>
     </div>
 
     <!-- Logout Confirmation Dialog -->

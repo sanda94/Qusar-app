@@ -1,28 +1,20 @@
 <template>
   <div class="q-pa-md">
-    <h1>Summary Page</h1>
-    <q-list v-if="users.length">
-      <q-item v-for="(user, index) in users" :key="index">
-        <q-item-section>
-          <q-item-label>{{ user.name }}</q-item-label>
-
-          <q-item-label caption>
-            <strong>Devices:</strong>
-            <ul>
-              <li
-                v-for="(device, idx) in getDevicesForUser(user.name)"
-                :key="idx"
-              >
-                {{ device.title }} - Part Number: {{ device.partNumber }}
-              </li>
-            </ul>
-            <span v-if="getDevicesForUser(user.name).length === 0"
-              >No devices assigned</span
-            >
-          </q-item-label>
-        </q-item-section>
-      </q-item>
-    </q-list>
+    <q-table
+      v-if="users.length"
+      :rows="formattedUsers"
+      :columns="columns"
+      row-key="name"
+    >
+      <template v-slot:body-cell-devices="props">
+        <ul v-if="props.row.devices.length">
+          <li v-for="(device, idx) in props.row.devices" :key="idx">
+            {{ device.title }} - Part Number: {{ device.partNumber }}
+          </li>
+        </ul>
+        <span v-else>No devices assigned</span>
+      </template>
+    </q-table>
     <div v-else>No users found.</div>
   </div>
 </template>
@@ -32,10 +24,12 @@ import { ref, onMounted } from "vue";
 
 const users = ref([]);
 const devices = ref([]);
+const formattedUsers = ref([]);
 
 onMounted(() => {
   loadUsers();
   loadDevices();
+  formatUserDeviceData();
 });
 
 function loadUsers() {
@@ -48,12 +42,47 @@ function loadDevices() {
   devices.value = storedDevices;
 }
 
-// Get all devices assigned to a user
-function getDevicesForUser(userName) {
-  return devices.value.filter((device) => device.customerName === userName);
+function formatUserDeviceData() {
+  formattedUsers.value = users.value.map((user) => {
+    const userDevices = devices.value.filter(
+      (device) => device.customerName === user.name
+    );
+    return {
+      name: user.name,
+      email: user.email || "N/A",
+      devices: userDevices,
+    };
+  });
 }
+
+const columns = [
+  {
+    name: "name",
+    required: true,
+    label: "User Name",
+    align: "left",
+    field: "name",
+  },
+  {
+    name: "email",
+    label: "Email",
+    align: "left",
+    field: "email",
+  },
+  {
+    name: "devices",
+    label: "Devices Assigned",
+    align: "left",
+    field: "devices",
+  },
+];
 </script>
 
 <style scoped>
-/* You can customize the styles here */
+h1 {
+  margin-bottom: 20px;
+}
+.q-table {
+  width: 100%;
+}
 </style>
