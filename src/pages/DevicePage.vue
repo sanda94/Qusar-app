@@ -1,6 +1,5 @@
 <template>
   <div class="q-pa-md">
-    <h1>Device Management</h1>
     <q-btn
       label="Add New Device"
       color="primary"

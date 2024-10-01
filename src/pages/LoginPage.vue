@@ -1,6 +1,9 @@
 <template>
   <div class="login-page">
-    <h1>Login Page</h1>
+    <!-- Add the image here -->
+    <img src="~/assets/dd.png" alt="Login Image" class="login-image" />
+
+    <h1>Login</h1>
     <form @submit.prevent="login">
       <input
         type="email"
@@ -24,6 +27,10 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
+// Dummy credentials for demonstration
+const validEmail = "test@example.com";
+const validPassword = "password123";
+
 const form = ref({
   email: "",
   password: "",
@@ -32,12 +39,18 @@ const form = ref({
 const router = useRouter();
 
 function login() {
-  // Mock login for demonstration
-  if (form.value.email && form.value.password) {
+  // Check if the entered email and password match the valid credentials
+  if (
+    form.value.email === validEmail &&
+    form.value.password === validPassword
+  ) {
+    // Store login state in localStorage
     localStorage.setItem("isAuthenticated", "true");
-    router.push("/"); // Redirect after login
+
+    // Redirect to home page after login
+    router.push("/IndexPage"); // Change "/home" to your actual home page route
   } else {
-    alert("Please fill in the email and password.");
+    alert("Invalid email or password. Please try again.");
   }
 }
 
@@ -52,28 +65,51 @@ function goToRegister() {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh; /* Full height to center */
+  height: 100vh;
+  background-color: #f9f9f9; /* Light background */
+  padding: 20px;
 }
 
 h1 {
   margin-bottom: 20px;
+  font-size: 24px;
 }
 
 input {
   margin-bottom: 10px;
   padding: 10px;
-  width: 200px; /* Adjust width */
+  width: 250px; /* Wider input fields */
+  border-radius: 5px; /* Rounded corners */
+  border: 1px solid #ccc;
+  font-size: 16px;
 }
 
 button {
-  padding: 10px;
-  background-color: blue;
+  padding: 10px 20px;
+  background-color: #4caf50; /* Green button */
   color: white;
   border: none;
+  border-radius: 5px;
   cursor: pointer;
+  font-size: 16px;
 }
 
 button:hover {
-  background-color: darkblue; /* Button hover effect */
+  background-color: #45a049; /* Darker green on hover */
+}
+
+p {
+  margin-top: 10px;
+  color: #007bff;
+  cursor: pointer;
+}
+
+p:hover {
+  text-decoration: underline;
+}
+
+.login-image {
+  width: 150px; /* Adjust image size */
+  margin-bottom: 20px;
 }
 </style>

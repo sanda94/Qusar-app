@@ -1,6 +1,5 @@
 <template>
   <div class="q-pa-md">
-    <h1>User Management</h1>
     <q-btn
       label="Add New User"
       color="primary"
