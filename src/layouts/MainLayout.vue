@@ -124,6 +124,12 @@ const linksList = [
     icon: "public",
     link: "/RulesPage",
   },
+  {
+    title: "Location",
+    caption: "navigate Location",
+    icon: "public",
+    link: "/LocationPage",
+  },
 ];
 </script>
 

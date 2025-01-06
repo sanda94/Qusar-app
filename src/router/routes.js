@@ -9,6 +9,11 @@ const routes = [
       { path: "UsersPage", component: () => import("pages/UsersPage.vue") },
       { path: "DevicePage", component: () => import("pages/DevicePage.vue") },
       { path: "RulesPage", component: () => import("pages/RulesPage.vue") },
+      // Make sure this line is added
+      {
+        path: "LocationPage",
+        component: () => import("pages/LocationPage.vue"),
+      },
     ],
   },
   {
@@ -16,7 +21,7 @@ const routes = [
     component: () => import("src/pages/LoginPage.vue"),
   },
   {
-    path: "/RegisterPage", // Add this route
+    path: "/RegisterPage",
     component: () => import("src/pages/RegisterPage.vue"),
   },
   {
