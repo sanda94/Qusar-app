@@ -55,6 +55,7 @@ function login() {
 }
 
 function goToRegister() {
+  console.log("Register button clicked");
   router.push("/RegisterPage");
 }
 </script>
